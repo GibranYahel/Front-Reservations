@@ -1,25 +1,57 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useStore } from 'vuex';
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'login',
+    component: () => import('../views/LogIn.vue')
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+    path: '/create',
+    name: 'create',
+    component: () => import('../views/CreateReservation.vue'),
+    meta: {
+      requiresIdClient: true,
+      requiresIdRoom: true
+    }
+  },
+  {
+    path: '/reservations',
+    name: 'reservations',
+    component: () => import('../views/Reservations.vue'),
+    meta: {
+      requiresIdClient: true
+    }
+  },
+  {
+    path: '/rooms',
+    name: 'rooms',
+    component: () => import('../views/Rooms.vue'),
+    meta: {
+      requiresIdClient: true
+    }
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const store = useStore();
+  const idClient = store.getters.idClient;
+  const idRoom = store.getters.selectedRoomId;
+  if (to.meta.requiresIdClient && !idClient) {
+    next('/');
+    return;
+  } 
+  if (to.meta.requiresIdRoom && !idRoom) {
+    next('/rooms');
+    return;
+  }
+  next();
+});
 
 export default router
