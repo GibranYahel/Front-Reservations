@@ -20,7 +20,6 @@
 </template>
   
 <script>
-import { VList, VListItem, VListItemContent } from 'vuetify'
 import axios from '../plugins/axios';
 
 export default {
@@ -46,11 +45,6 @@ export default {
 
             this.$router.push('/create');
         },
-    },
-    components: {
-        VList,
-        VListItem,
-        VListItemContent,
     },
 };
 </script>

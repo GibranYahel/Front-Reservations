@@ -32,6 +32,22 @@ const routes = [
       requiresIdClient: true
     }
   },
+  {
+    path: '/users',
+    name: 'users',
+    component: () => import('../views/Users.vue'),
+    meta: {
+      requiresIdClient: true
+    }
+  },
+  {
+    path: '/updateUser',
+    name: 'updateUser',
+    component: () => import('../views/UpdateUser.vue'),
+    meta: {
+      requiresIdClient: true
+    }
+  },
 ]
 
 const router = createRouter({

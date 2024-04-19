@@ -2,7 +2,7 @@
   <v-app>
 
     <v-toolbar app>
-      <v-icon @click="drawer = !drawer"
+      <v-icon @click="drawer = !drawer" :disabled="idClient === null"
       style="padding-left: 20px; cursor: pointer;">
       mdi-menu
       </v-icon>
@@ -10,9 +10,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn :to="{name: 'rooms'}">Rooms</v-btn>
-      <v-btn>Log In</v-btn>
-      <v-btn>Log out</v-btn>
+      <v-btn :to="{name: 'rooms'}"> Rooms </v-btn>
+      <v-btn :to="{name: 'users'}"> Users </v-btn>
     </v-toolbar>
 
     <v-navigation-drawer app v-model="drawer" temporary class="dark bg-grey darken-4">
@@ -23,7 +22,7 @@
           </v-avatar>
         </div>
         <div class="mt-2">
-          <h1>User Name</h1>
+          <h1>{{ userName }}{{  }}</h1>
         </div>
       </div>
       <div class="d-flex flex-column mt-3">
@@ -41,13 +40,32 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
   name: 'App',
 
   data() {
-    return{
-      drawer: true
-    }
-  }
+    return {
+      drawer: false
+    };
+  },
+
+  setup() {
+    const store = useStore();
+
+    const idClient = computed(() => store.getters.idClient);
+
+    const userName = computed(() => {
+      const clientData = store.getters.clientData; 
+      return clientData ? clientData.name + ' ' + clientData.lastName : '';
+    });
+
+    return {
+      idClient,
+      userName
+    };
+  },
 }
 </script>
